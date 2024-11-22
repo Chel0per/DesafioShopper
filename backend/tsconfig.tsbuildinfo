@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/handlers/rides.ts","./src/routes/rides.ts","./src/services/getapidata.ts","./src/services/getdrivers.ts","./src/types/driver.ts","./src/types/location.ts","./src/types/estimatefailresponsebody.ts","./src/types/estimaterequestbody.ts","./src/types/estimatesuccesresponsebody.ts"],"version":"5.6.3"}
