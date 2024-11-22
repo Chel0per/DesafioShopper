@@ -14,15 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const rides_1 = __importDefault(require("./routes/rides"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use("/ride", rides_1.default);
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(`Server started on port ${PORT}`);
-}));
-app.get("/", function (req, res) {
-    res.send({ status: "This definitelly is an API" });
+const connectionString = "mongodb://127.0.0.1:27017/ridesDB";
+mongoose_1.default.connect(connectionString).then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
+        console.log(`Server started on port ${PORT}`);
+    }));
 });

@@ -1,16 +1,19 @@
 import { Request, Response } from "express-serve-static-core";
-import { estimateRequestBody } from "../types/estimateRequestBody";
-import { estimateSuccessResponseBody } from "../types/estimateSuccesResponseBody";
+import { EstimateRequestBody } from "../types/EstimateRequestBody";
+import { EstimateSuccessResponseBody } from "../types/EstimateSuccessResponseBody";
 import { getApiData } from "../services/getApiData";
-import { getDrivers } from "../services/getDrivers";
+import { getAvailableDrivers } from "../services/getAvailableDrivers";
 import { Driver } from "../types/Driver";
 import { Location } from "../types/Location";
+import { ConfirmRequestBody } from "../types/ConfirmRequestBody";
+import { rideSchema } from "../schemas/rideSchema";
+import mongoose from "mongoose";
 
-export async function getDistance(req:Request<{},{},estimateRequestBody>,res:Response<estimateSuccessResponseBody>){
+export async function getDistance(req:Request<{},{},EstimateRequestBody>,res:Response<EstimateSuccessResponseBody>){
     
     const data = await getApiData(req.body.origin,req.body.destination);
     
-    const drivers:Driver[] = getDrivers(data.routes[0].distanceMeters);
+    const drivers:Driver[] = getAvailableDrivers(data.routes[0].distanceMeters);
 
     const originLocation:Location = {
         "latitude":data.routes[0].legs[0].startLocation.latLng.latitude,
@@ -33,6 +36,13 @@ export async function getDistance(req:Request<{},{},estimateRequestBody>,res:Res
     
 };
 
-export async function confirmRide(req:Request,res:Response){
+export async function confirmRide(req:Request<{},{},ConfirmRequestBody>,res:Response){
+
+    const Ride = mongoose.model("ride",rideSchema,"rides");
+    const newRide = new Ride(req.body);
+
+    await newRide.save();
+    
+    res.status(200).json({"success":true});
 
 }

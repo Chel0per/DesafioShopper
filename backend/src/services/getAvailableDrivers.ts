@@ -1,6 +1,6 @@
 import {Driver} from "../types/Driver";
 
-export function getDrivers(distanceMeters:number):Driver[]{
+export function getAvailableDrivers(distanceMeters:number):Driver[]{
 
     const availableDrivers = [
         {
