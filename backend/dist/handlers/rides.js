@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDistance = getDistance;
 exports.confirmRide = confirmRide;
+exports.getSortedRides = getSortedRides;
 const getApiData_1 = require("../services/getApiData");
 const getAvailableDrivers_1 = require("../services/getAvailableDrivers");
 const rideSchema_1 = require("../schemas/rideSchema");
@@ -47,5 +48,37 @@ function confirmRide(req, res) {
         const newRide = new Ride(req.body);
         yield newRide.save();
         res.status(200).json({ "success": true });
+    });
+}
+function getSortedRides(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const Ride = mongoose_1.default.model("ride", rideSchema_1.rideSchema, "rides");
+        let rides;
+        if (req.query.hasOwnProperty("driver_id")) {
+            rides = yield Ride.find({ "customer_id": req.params.customer_id, "driver.id": req.query.driver_id }, { __v: 0, _id: 0 }).sort({ date: -1 });
+        }
+        else {
+            rides = yield Ride.find({ "customer_id": req.params.customer_id }, { __v: 0, _id: 0 }).sort({ date: -1 });
+        }
+        if (rides.length == 0) {
+            if (req.query.hasOwnProperty("driver_id")) {
+                res.status(404).json({
+                    "error_code": "NO_RIDES_FOUND",
+                    "error_description": `There are no rides registered with a costumer id of ${req.params.customer_id} and a driver id of ${req.query.driver_id}`
+                });
+            }
+            else {
+                res.status(404).json({
+                    "error_code": "NO_RIDES_FOUND",
+                    "error_description": `There are no rides registered with the costume_id:${req.params.customer_id}`
+                });
+            }
+        }
+        else {
+            res.status(200).json({
+                "customer_id": req.params.customer_id,
+                "rides": rides
+            });
+        }
     });
 }

@@ -1,7 +1,7 @@
 import {Router} from "express";
 import { body, validationResult } from 'express-validator';
 import { Request, Response , NextFunction} from "express-serve-static-core";
-import { getDistance,confirmRide } from "../handlers/rides";
+import { getDistance,confirmRide, getSortedRides } from "../handlers/rides";
 import { ConfirmRequestBody } from "../types/ConfirmRequestBody";
 import { InvalidDataFailResponseBody } from "../types/InvalidDataFailResponseBody";
 import { DriverNotFoundFailResponseBody } from "../types/DriverNotFoundFailResponseBody";
@@ -94,6 +94,24 @@ ridesRouter.patch(
         }
     },
     confirmRide
+);
+
+ridesRouter.get(
+    "/:customer_id",
+    (req: Request, res: Response, next: NextFunction) => {
+        if(req.query.hasOwnProperty("driver_id")){
+            const parsedValue = Number(req.query.driver_id);
+            if(!isNaN(parsedValue) && driverExistById(parsedValue)) next();
+            else{
+                res.status(400).json({
+                    error_code:"INVALID_DRIVER",
+                    error_description:"No driver found with the value sent in the query"
+                })
+            }
+        } 
+        else next();
+    },
+    getSortedRides
 );
 
 export default ridesRouter;

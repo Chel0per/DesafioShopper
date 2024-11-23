@@ -80,4 +80,19 @@ ridesRouter.patch('/confirm', [
         });
     }
 }, rides_1.confirmRide);
+ridesRouter.get("/:customer_id", (req, res, next) => {
+    if (req.query.hasOwnProperty("driver_id")) {
+        const parsedValue = Number(req.query.driver_id);
+        if (!isNaN(parsedValue) && (0, driverExistById_1.driverExistById)(parsedValue))
+            next();
+        else {
+            res.status(400).json({
+                error_code: "INVALID_DRIVER",
+                error_description: "No driver found with the value sent in the query"
+            });
+        }
+    }
+    else
+        next();
+}, rides_1.getSortedRides);
 exports.default = ridesRouter;
