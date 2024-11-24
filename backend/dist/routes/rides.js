@@ -7,7 +7,7 @@ const generateErrorString_1 = require("../services/generateErrorString");
 const driverExistById_1 = require("../services/driverExistById");
 const checkMinDistance_1 = require("../services/checkMinDistance");
 const ridesRouter = (0, express_1.Router)();
-ridesRouter.post('/estimate', [
+ridesRouter.post("/estimate", [
     (0, express_validator_1.body)("customer_id")
         .notEmpty()
         .withMessage("Customer Id is required."),

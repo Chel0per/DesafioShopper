@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 export async function getApiData(origin:string,destination:string){
 
@@ -28,7 +28,7 @@ export async function getApiData(origin:string,destination:string){
     let response = await fetch(api_url,{
         method:"POST",
         headers: {
-            "X-Goog-FieldMask": "routes.distanceMeters,routes.duration,routes.legs",
+            "X-Goog-FieldMask": "routes.distanceMeters,routes.duration,routes.polyline.encodedPolyline,routes.legs",
             "Content-Type": "application/json",
             "X-Goog-Api-Key":API_KEY
         },

@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getApiData = getApiData;
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+dotenv_1.default.config({ path: '../.env' });
 function getApiData(origin, destination) {
     return __awaiter(this, void 0, void 0, function* () {
         const api_url = "https://routes.googleapis.com/directions/v2:computeRoutes";
@@ -40,7 +40,7 @@ function getApiData(origin, destination) {
         let response = yield fetch(api_url, {
             method: "POST",
             headers: {
-                "X-Goog-FieldMask": "routes.distanceMeters,routes.duration,routes.legs",
+                "X-Goog-FieldMask": "routes.distanceMeters,routes.duration,routes.polyline.encodedPolyline,routes.legs",
                 "Content-Type": "application/json",
                 "X-Goog-Api-Key": API_KEY
             },
