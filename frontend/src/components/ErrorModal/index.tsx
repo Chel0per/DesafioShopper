@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import { Container,Warning,OkButton } from "./styles"
+import React from "react";
+import { Container,Warning,OkButton, ModalContainer } from "./styles"
 import { ModalInformationType } from "../../types/ModalInformationType";
 
 interface ErrorModalProps {
@@ -8,13 +8,15 @@ interface ErrorModalProps {
     "setModal":React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ErrorModal:FC<ErrorModalProps> = (props)=> {
+const ErrorModal:React.FC<ErrorModalProps> = (props)=> {
 
     if(props.showModal) return(
         <Container>
-            <Warning>Error code:{props.modalInformation.error_code}</Warning>
-            <Warning>Error description:{props.modalInformation.error_description}</Warning>
-            <OkButton onClick={()=>props.setModal(false)}>Ok</OkButton>
+            <ModalContainer>
+                <Warning>Error code:{props.modalInformation.error_code}</Warning>
+                <Warning>Error description:{props.modalInformation.error_description}</Warning>
+                <OkButton onClick={()=>props.setModal(false)}>Ok</OkButton>
+            </ModalContainer>
         </Container>
     )
     else return null;

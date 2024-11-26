@@ -43,7 +43,13 @@ ridesRouter.post(
             next();
         }        
     },
-    getDistance
+    getDistance,
+    (req: Request, res: Response) => {
+        res.status(500).json({
+            "error_code":"SERVER_ERROR",
+            "error_description":"Internal Server Error. Maybe the api weren't able to convert the string sent to an addres."
+        });
+    }    
 );
 
 ridesRouter.patch(
@@ -105,7 +111,7 @@ ridesRouter.get(
             else{
                 res.status(400).json({
                     error_code:"INVALID_DRIVER",
-                    error_description:"No driver found with the value sent in the query"
+                    error_description:"No driver found with the id sent in the query"
                 })
             }
         } 

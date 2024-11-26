@@ -19,29 +19,33 @@ const getApiData_1 = require("../services/getApiData");
 const getAvailableDrivers_1 = require("../services/getAvailableDrivers");
 const rideSchema_1 = require("../schemas/rideSchema");
 const mongoose_1 = __importDefault(require("mongoose"));
-function getDistance(req, res) {
+function getDistance(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const data = yield (0, getApiData_1.getApiData)(req.body.origin, req.body.destination);
-        const drivers = (0, getAvailableDrivers_1.getAvailableDrivers)(data.routes[0].distanceMeters);
-        const originLocation = {
-            "latitude": data.routes[0].legs[0].startLocation.latLng.latitude,
-            "longitude": data.routes[0].legs[0].startLocation.latLng.longitude
-        };
-        const destinationLocation = {
-            "latitude": data.routes[0].legs[0].endLocation.latLng.latitude,
-            "longitude": data.routes[0].legs[0].endLocation.latLng.longitude
-        };
-        res.status(200).json({
-            "origin": originLocation,
-            "destination": destinationLocation,
-            "distance": data.routes[0].distanceMeters,
-            "duration": data.routes[0].duration,
-            "options": drivers,
-            "routeResponse": data
-        });
+        try {
+            const data = yield (0, getApiData_1.getApiData)(req.body.origin, req.body.destination);
+            const drivers = (0, getAvailableDrivers_1.getAvailableDrivers)(data.routes[0].distanceMeters);
+            const originLocation = {
+                latitude: data.routes[0].legs[0].startLocation.latLng.latitude,
+                longitude: data.routes[0].legs[0].startLocation.latLng.longitude,
+            };
+            const destinationLocation = {
+                latitude: data.routes[0].legs[0].endLocation.latLng.latitude,
+                longitude: data.routes[0].legs[0].endLocation.latLng.longitude,
+            };
+            res.status(200).json({
+                origin: originLocation,
+                destination: destinationLocation,
+                distance: data.routes[0].distanceMeters,
+                duration: data.routes[0].duration,
+                options: drivers,
+                routeResponse: data,
+            });
+        }
+        catch (error) {
+            next();
+        }
     });
 }
-;
 function confirmRide(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const Ride = mongoose_1.default.model("ride", rideSchema_1.rideSchema, "rides");
