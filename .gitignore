@@ -1,3 +1,4 @@
 .env
+backend/dist
 backend/testingAPI.js
 backend/node_modules
