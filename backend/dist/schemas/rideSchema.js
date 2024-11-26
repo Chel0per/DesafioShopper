@@ -25,7 +25,7 @@ exports.rideSchema = new mongoose_1.default.Schema({
     destination: String,
     date: {
         type: Date,
-        default: Date.now
+        default: () => new Date(Date.now())
     },
     distance: Number,
     duration: String,

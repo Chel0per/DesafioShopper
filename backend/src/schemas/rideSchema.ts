@@ -11,7 +11,7 @@ export const rideSchema = new mongoose.Schema({
     destination:String,
     date: {
         type: Date,
-        default: Date.now
+        default: () => new Date(Date.now())
     },
     distance:Number,
     duration:String,
