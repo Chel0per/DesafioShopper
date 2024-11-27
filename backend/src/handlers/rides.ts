@@ -59,10 +59,10 @@ export async function getSortedRides(req:Request,res:Response){
     let rides;
 
     if(req.query.hasOwnProperty("driver_id")){
-        rides = await Ride.find({"customer_id":req.params.customer_id,"driver.id":req.query.driver_id},{__v:0,_id:0}).sort({ date: -1 });
+        rides = await Ride.find({"customer_id":req.params.customer_id,"driver.id":req.query.driver_id},{__v:0,_id:0,customer_id:0}).sort({ date: -1 });
     }
     else{
-        rides = await Ride.find({"customer_id":req.params.customer_id},{__v:0,_id:0}).sort({ date: -1 });
+        rides = await Ride.find({"customer_id":req.params.customer_id},{__v:0,_id:0,customer_id:0}).sort({ date: -1 });
     }
 
     if (rides.length == 0){
