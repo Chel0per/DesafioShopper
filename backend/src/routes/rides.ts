@@ -13,7 +13,7 @@ import { checkMinDistance } from "../services/checkMinDistance";
 const ridesRouter = Router();
 
 ridesRouter.post(
-    '/estimate',
+    "/estimate",
     [
         body("customer_id")
             .notEmpty()
