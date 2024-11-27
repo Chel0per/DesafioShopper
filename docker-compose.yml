@@ -1,0 +1,45 @@
+name: shopper-app
+
+services:
+
+  mongo:
+    image: mongo:7.0.12
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - shopper-app
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./.env
+    networks:
+      - shopper-app
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./frontend/.env
+    networks:
+      - shopper-app
+    ports:
+      - 80:80
+    depends_on:
+      - api
+
+volumes:
+  mongo_data:
+
+networks:
+  shopper-app:
+    driver: bridge
